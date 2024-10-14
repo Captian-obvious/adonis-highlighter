@@ -6,15 +6,15 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-tomorrow.min.css" rel="stylesheet" />
     <style>
         pre[class*="language-"] .token.command {
-            color: red;
+            color: purple;
         }
 
         pre[class*="language-"] .token.argument {
-            color: orange;
+            color: blue;
         }
 
         pre[class*="language-"] .token.separator {
-            color: yellow;
+            color: red;
         }
 
         textarea {
@@ -30,7 +30,7 @@
                 greedy: true
             },
             'argument': {
-                pattern: /\s\S+/,
+                pattern: /[^\s|]+/,
                 greedy: true
             },
             'separator': {
@@ -41,7 +41,9 @@
 
         function highlight() {
             var code = document.getElementById('code').value;
-            document.getElementById('highlighted-code').innerHTML = Prism.highlight(code, Prism.languages.adonis, 'adonis');
+            var parts = code.split('|');
+            var highlighted = parts.map(part => Prism.highlight(part, Prism.languages.adonis, 'adonis')).join(' <span class="token separator">|</span> ');
+            document.getElementById('highlighted-code').innerHTML = highlighted;
         }
     </script>
 </head>
