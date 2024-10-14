@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Adonis Syntax Highlighting</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <style>
+        pre[class*="language-"] .token.command {
+            color: purple;
+        }
+
+        pre[class*="language-"] .token.argument {
+            color: blue;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+    <script>
+        Prism.languages.adonis = {
+            'command': {
+                pattern: /:[a-zA-Z]+/,
+                greedy: true
+            },
+            'argument': {
+                pattern: /\s\S+/,
+                greedy: true
+            }
+        };
+    </script>
+</head>
+<body>
+    <pre><code class="language-adonis">:kick player1</code></pre>
+</body>
+</html>
