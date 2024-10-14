@@ -1,0 +1,7 @@
+pre[class*="language-"] .token.command {
+    color: purple;
+};
+
+pre[class*="language-"] .token.argument {
+    color: blue;
+};
