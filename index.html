@@ -2,54 +2,75 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Adonis Syntax Highlighting</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <title>Adonis Syntax Highlighting with Ace</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.min.css" rel="stylesheet" />
     <style>
-        pre[class*="language-"] .token.command {
-            color: red;
-        }
-
-        pre[class*="language-"] .token.argument {
-            color: orange;
-        }
-
-        pre[class*="language-"] .token.separator {
-            color: yellow;
-        }
-
-        textarea {
+        #editor {
             width: 100%;
-            height: 200px;
+            height: 400px;
+        }
+
+        .ace-red .ace_keyword {
+            color: red !important;
+        }
+
+        .ace-orange .ace_identifier {
+            color: orange !important;
+        }
+
+        .ace-yellow .ace_operator {
+            color: yellow !important;
         }
     </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js"></script>
     <script>
-        Prism.languages.adonis = {
-            'command': {
-                pattern: /:[a-zA-Z]+/,
-                greedy: true
-            },
-            'argument': {
-                pattern: /[^\s|]+/,
-                greedy: true
-            },
-            'separator': {
-                pattern: /\|/,
-                greedy: true
-            }
-        };
+        document.addEventListener("DOMContentLoaded", function () {
+            var editor = ace.edit("editor");
+            editor.setTheme("ace/theme/twilight");
+            editor.session.setMode("ace/mode/text");
 
-        function highlight() {
-            var code = document.getElementById('code').value;
-            var parts = code.split('|');
-            var highlighted = parts.map(part => Prism.highlight(part, Prism.languages.adonis, 'adonis')).join(' <span class="token separator">|</span> ');
-            document.getElementById('highlighted-code').innerHTML = highlighted;
-        }
+            ace.define("ace/mode/adonis", [], function(require, exports, module) {
+                var oop = require("ace/lib/oop");
+                var TextMode = require("ace/mode/text").Mode;
+                var Tokenizer = require("ace/tokenizer").Tokenizer;
+                var AdonisHighlightRules = require("ace/mode/adonis_highlight_rules").AdonisHighlightRules;
+
+                var Mode = function() {
+                    this.HighlightRules = AdonisHighlightRules;
+                };
+                oop.inherits(Mode, TextMode);
+
+                (function() {
+                    this.$id = "ace/mode/adonis";
+                }).call(Mode.prototype);
+
+                exports.Mode = Mode;
+            });
+
+            ace.define("ace/mode/adonis_highlight_rules", [], function(require, exports, module) {
+                var oop = require("ace/lib/oop");
+                var TextHighlightRules = require("ace/mode/text_highlight_rules").TextHighlightRules;
+
+                var AdonisHighlightRules = function() {
+                    this.$rules = {
+                        "start": [
+                            { token: "command", regex: /:[a-zA-Z]+/ },
+                            { token: "argument", regex: /[^\s|]+/ },
+                            { token: "separator", regex: /\|/ }
+                        ]
+                    };
+                };
+                oop.inherits(AdonisHighlightRules, TextHighlightRules);
+
+                exports.AdonisHighlightRules = AdonisHighlightRules;
+            });
+
+            editor.session.setMode("ace/mode/adonis");
+        });
     </script>
 </head>
 <body>
-    <h1>Adonis Admin Command Highlighter</h1>
-    <textarea id="code" oninput="highlight()"></textarea>
-    <pre><code id="highlighted-code" class="language-adonis"></code></pre>
+    <h1>Adonis Admin Command Highlighter with Ace</h1>
+    <div id="editor">:command argument1|argument2|argument3</div>
 </body>
 </html>
