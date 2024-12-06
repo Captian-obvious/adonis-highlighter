@@ -29,6 +29,24 @@
             editor.setTheme("ace/theme/twilight");
             editor.session.setMode("ace/mode/text");
 
+            ace.define("ace/mode/adonis_highlight_rules", [], function(require, exports, module) {
+                var oop = require("ace/lib/oop");
+                var TextHighlightRules = require("ace/mode/text_highlight_rules").TextHighlightRules;
+
+                var AdonisHighlightRules = function() {
+                    this.$rules = {
+                        "start": [
+                            { token: "command", regex: /:[a-zA-Z]+/ },
+                            { token: "argument", regex: /[^\s|]+/ },
+                            { token: "separator", regex: /\|/ }
+                        ]
+                    };
+                };
+                oop.inherits(AdonisHighlightRules, TextHighlightRules);
+
+                exports.AdonisHighlightRules = AdonisHighlightRules;
+            });
+
             ace.define("ace/mode/adonis", [], function(require, exports, module) {
                 var oop = require("ace/lib/oop");
                 var TextMode = require("ace/mode/text").Mode;
@@ -47,23 +65,6 @@
                 exports.Mode = Mode;
             });
 
-            ace.define("ace/mode/adonis_highlight_rules", [], function(require, exports, module) {
-                var oop = require("ace/lib/oop");
-                var TextHighlightRules = require("ace/mode/text_highlight_rules").TextHighlightRules;
-
-                var AdonisHighlightRules = function() {
-                    this.$rules = {
-                        "start": [
-                            { token: "command", regex: /:[a-zA-Z]+/ },
-                            { token: "argument", regex: /[^\s|]+/ },
-                            { token: "separator", regex: /\|/ }
-                        ]
-                    };
-                };
-                oop.inherits(AdonisHighlightRules, TextHighlightRules);
-
-                exports.AdonisHighlightRules = AdonisHighlightRules;
-            });
 
             editor.session.setMode("ace/mode/adonis");
         });
